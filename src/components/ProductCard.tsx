@@ -1,36 +1,57 @@
-import React from 'react';
-import { Product } from '../types';
-import { useCart } from '../context/CartContext';
-import { ShoppingCart } from 'lucide-react';
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import { FaShoppingCart, FaHeart } from "react-icons/fa";
 
 interface ProductCardProps {
-  product: Product;
+  id: string;
+  name: string;
+  price: number;
+  image: string;
+  category: string;
+  subcategory: string;
 }
 
-export function ProductCard({ product }: ProductCardProps) {
-  const { addToCart } = useCart();
+export function ProductCard({
+  id,
+  name,
+  price,
+  image,
+  category,
+  subcategory,
+}: ProductCardProps) {
+  const [isHovered, setIsHovered] = useState(false);
 
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden">
-      <img
-        src={product.image}
-        alt={product.name}
-        className="w-full h-64 object-cover"
-      />
-      <div className="p-4">
-        <h3 className="text-lg font-semibold text-gray-800">{product.name}</h3>
-        <p className="text-sm text-gray-600 mt-1">{product.description}</p>
-        <div className="mt-4 flex items-center justify-between">
-          <span className="text-xl font-bold text-peach-600">
-            ${product.price.toFixed(2)}
-          </span>
-          <button
-            onClick={() => addToCart(product)}
-            className="bg-peach-500 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-peach-600 transition-colors"
-          >
-            <ShoppingCart size={20} />
-            Add to Cart
+    <div className="bg-white rounded-lg shadow-md overflow-hidden group">
+      <div className="relative aspect-[3/4] overflow-hidden">
+        <img
+          src={image}
+          alt={name}
+          className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300"
+        />
+        <div className="absolute top-2 right-2 space-y-2">
+          <button className="p-2 bg-white rounded-full shadow-md hover:bg-gray-100 transition-colors">
+            <FaHeart className="text-gray-600 hover:text-red-500" />
           </button>
+          <button className="p-2 bg-white rounded-full shadow-md hover:bg-gray-100 transition-colors">
+            <FaShoppingCart className="text-gray-600 hover:text-[#ff6d38]" />
+          </button>
+        </div>
+      </div>
+      <div className="p-4">
+        <Link
+          to={`/product/${id}`}
+          className="block text-sm font-medium text-gray-900 hover:text-[#ff6d38] mb-1 truncate"
+        >
+          {name}
+        </Link>
+        <div className="flex items-center justify-between">
+          <span className="text-lg font-semibold text-[#ff6d38]">
+            ${price.toFixed(2)}
+          </span>
+          <span className="text-sm text-gray-500">
+            {category} / {subcategory}
+          </span>
         </div>
       </div>
     </div>

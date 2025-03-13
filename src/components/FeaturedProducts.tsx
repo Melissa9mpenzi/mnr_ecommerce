@@ -1,29 +1,30 @@
-import React from 'react';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation } from 'swiper/modules';
-import { ProductCard } from './ProductCard';
-import { featuredProducts } from '../data/products';
-import 'swiper/css';
-import 'swiper/css/navigation';
+import React from "react";
+import { ProductCard } from "./ProductCard";
+import { products } from "../data/products";
 
 export function FeaturedProducts() {
+  const featuredProducts = products.slice(0, 4);
+
   return (
-    <div className="my-12">
-      <h2 className="text-2xl font-bold text-peach-900 mb-6">Featured Products</h2>
-      <Swiper
-        modules={[Navigation]}
-        navigation
-        breakpoints={{
-          640: { slidesPerView: 2, spaceBetween: 20 },
-          768: { slidesPerView: 3, spaceBetween: 30 },
-        }}
-      >
-        {featuredProducts.map(product => (
-          <SwiperSlide key={product.id}>
-            <ProductCard product={product} />
-          </SwiperSlide>
-        ))}
-      </Swiper>
-    </div>
+    <section className="py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 className="text-2xl font-bold text-gray-900 mb-8">
+          Featured Products
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {featuredProducts.map((product) => (
+            <ProductCard
+              key={product.id}
+              id={product.id}
+              name={product.name}
+              price={product.price}
+              image={product.image}
+              category={product.category}
+              subcategory={product.subcategory}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }

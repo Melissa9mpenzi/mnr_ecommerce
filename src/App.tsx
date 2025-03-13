@@ -4,13 +4,14 @@ import { Navbar } from "./components/Navbar";
 import { Footer } from "./components/Footer";
 import { CartProvider } from "./context/CartContext";
 import { Toaster } from "react-hot-toast";
-import { Home } from "./pages/Home";
+import Home from "./pages/Home";
 import { CategoryPage } from "./pages/CategoryPage";
-import { Cart } from "./components/Cart";
+import Cart from "./pages/Cart";
 import { Contact } from "./pages/Contact";
-import { Login } from "./pages/Login";
-import { SignUp } from "./pages/SignUp";
-import { Checkout } from "./pages/Checkout";
+import Login from "./pages/Login";
+import SignUp from "./pages/SignUp";
+import Checkout from "./pages/Checkout";
+import { AboutUs } from "./pages/AboutUs";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
               />
               <Route path="/cart" element={<Cart />} />
               <Route path="/contact" element={<Contact />} />
+              <Route path="/about" element={<AboutUs />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<SignUp />} />
               <Route path="/checkout" element={<Checkout />} />

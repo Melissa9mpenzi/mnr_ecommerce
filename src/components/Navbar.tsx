@@ -1,14 +1,16 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { FaShoppingCart, FaUser, FaBars, FaTimes } from "react-icons/fa";
+import { Link, useNavigate } from "react-router-dom";
+import { FaShoppingCart, FaUser, FaBars } from "react-icons/fa";
 import { categories } from "../data/categories";
 
-const Navbar = () => {
+export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isAccountDropdownOpen, setIsAccountDropdownOpen] = useState(false);
+  const [isAccountOpen, setIsAccountOpen] = useState(false);
+  const [isMoreMenuOpen, setIsMoreMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
   return (
-    <nav className="bg-white shadow-md fixed w-full z-50">
+    <nav className="bg-white shadow-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           {/* Logo */}
@@ -22,13 +24,13 @@ const Navbar = () => {
           <div className="hidden md:flex items-center space-x-8">
             {categories.map((category) => (
               <div key={category.id} className="relative group">
-                <Link
-                  to={`/category/${category.id}`}
+                <button
+                  onClick={() => navigate(`/category/${category.id}`)}
                   className="text-gray-700 hover:text-[#ff6d38] font-medium"
                 >
                   {category.name}
-                </Link>
-                <div className="absolute hidden group-hover:block w-48 bg-white shadow-lg py-2 mt-2">
+                </button>
+                <div className="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
                   {category.subcategories.map((sub) => (
                     <Link
                       key={sub.id}
@@ -45,35 +47,31 @@ const Navbar = () => {
 
           {/* Icons */}
           <div className="flex items-center space-x-4">
-            {/* Cart Icon */}
             <Link to="/cart" className="relative">
-              <FaShoppingCart className="h-6 w-6 text-gray-700 hover:text-[#ff6d38]" />
-              <span className="absolute -top-2 -right-2 bg-[#ff6d38] text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+              <FaShoppingCart className="text-xl text-gray-700 hover:text-[#ff6d38]" />
+              <span className="absolute -top-2 -right-2 bg-[#ff6d38] text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
                 0
               </span>
             </Link>
 
-            {/* Account Icon with Dropdown */}
             <div className="relative">
               <button
-                onClick={() => setIsAccountDropdownOpen(!isAccountDropdownOpen)}
-                className="focus:outline-none"
+                onClick={() => setIsAccountOpen(!isAccountOpen)}
+                className="text-gray-700 hover:text-[#ff6d38]"
               >
-                <FaUser className="h-6 w-6 text-gray-700 hover:text-[#ff6d38]" />
+                <FaUser className="text-xl" />
               </button>
-              {isAccountDropdownOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg py-2 rounded-md">
+              {isAccountOpen && (
+                <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50">
                   <Link
                     to="/login"
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                    onClick={() => setIsAccountDropdownOpen(false)}
                   >
                     Login
                   </Link>
                   <Link
                     to="/signup"
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                    onClick={() => setIsAccountDropdownOpen(false)}
                   >
                     Sign Up
                   </Link>
@@ -81,19 +79,44 @@ const Navbar = () => {
               )}
             </div>
 
-            {/* Mobile menu button */}
-            <div className="md:hidden">
+            <div className="relative">
               <button
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-[#ff6d38] focus:outline-none"
+                onClick={() => setIsMoreMenuOpen(!isMoreMenuOpen)}
+                className="text-gray-700 hover:text-[#ff6d38]"
               >
-                {isMenuOpen ? (
-                  <FaTimes className="h-6 w-6" />
-                ) : (
-                  <FaBars className="h-6 w-6" />
-                )}
+                <FaBars className="text-xl" />
               </button>
+              {isMoreMenuOpen && (
+                <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50">
+                  <Link
+                    to="/"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                    Home
+                  </Link>
+                  <Link
+                    to="/about"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                    About Us
+                  </Link>
+                  <Link
+                    to="/contact"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                    Contact
+                  </Link>
+                </div>
+              )}
             </div>
+
+            {/* Mobile menu button */}
+            <button
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="md:hidden text-gray-700 hover:text-[#ff6d38]"
+            >
+              <FaBars className="text-xl" />
+            </button>
           </div>
         </div>
       </div>
@@ -101,23 +124,21 @@ const Navbar = () => {
       {/* Mobile menu */}
       {isMenuOpen && (
         <div className="md:hidden">
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+          <div className="px-2 pt-2 pb-3 space-y-1">
             {categories.map((category) => (
               <div key={category.id}>
-                <Link
-                  to={`/category/${category.id}`}
-                  className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-[#ff6d38]"
-                  onClick={() => setIsMenuOpen(false)}
+                <button
+                  onClick={() => navigate(`/category/${category.id}`)}
+                  className="block w-full text-left px-3 py-2 text-base font-medium text-gray-700 hover:text-[#ff6d38] hover:bg-gray-50"
                 >
                   {category.name}
-                </Link>
-                <div className="pl-6">
+                </button>
+                <div className="pl-4">
                   {category.subcategories.map((sub) => (
                     <Link
                       key={sub.id}
                       to={`/category/${category.id}/${sub.id}`}
-                      className="block px-3 py-2 text-sm text-gray-600 hover:text-[#ff6d38]"
-                      onClick={() => setIsMenuOpen(false)}
+                      className="block px-3 py-2 text-sm text-gray-600 hover:text-[#ff6d38] hover:bg-gray-50"
                     >
                       {sub.name}
                     </Link>
@@ -130,6 +151,4 @@ const Navbar = () => {
       )}
     </nav>
   );
-};
-
-export default Navbar;
+}
